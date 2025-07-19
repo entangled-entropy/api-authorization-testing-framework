@@ -14,6 +14,7 @@ def check_privilege_escalation(base_url: str) -> None:
     print("[*] Starting Privilege Escalation Module...")
 
     auth = Authenticator(base_url)
+    findings = []
 
     for case in TEST_CASES:
         user_id = case["user"]
@@ -32,7 +33,7 @@ def check_privilege_escalation(base_url: str) -> None:
             print(f"[!] Login failed for user '{user_id}'.")
             continue
 
-        print(f"\n\n[*] Logged in as {user_id}, testing '{endpoint_key}' on resource '{resource_id}'")
+        print(f"\n[*] Logged in as {user_id}, testing '{endpoint_key}' on resource '{resource_id}'")
 
         # Determine the resource type from ENDPOINTS config
         endpoint_def = ENDPOINTS.get(endpoint_key)
@@ -65,11 +66,28 @@ def check_privilege_escalation(base_url: str) -> None:
                 # Determine escalation type
                 owner_roles = [u["role"] for u in USERS if u["id"] in owner_ids]
                 attacker_role = user["role"]
-                if any(is_vertical_escalation(attacker_role, owner_role) for owner_role in owner_roles):
-                    print("=> Vertical Privilege Escalation Detected")
-                else:
-                    print("=> Horizontal Privilege Escalation Detected")
+                
+                # if any(is_vertical_escalation(attacker_role, owner_role) for owner_role in owner_roles):
+                #     print("=> Vertical Privilege Escalation Detected")
+                # else:
+                #     print("=> Horizontal Privilege Escalation Detected")
+                
+                escalation_type = "Vertical" if any(
+                    is_vertical_escalation(attacker_role, owner_role) for owner_role in owner_roles
+                ) else "Horizontal"
+
+                print(f"=> {escalation_type} Privilege Escalation Detected")
+                findings.append({
+                    "type": f"{escalation_type} Privilege Escalation",
+                    "user": user_id,
+                    "role": attacker_role,
+                    "resource": resource_id,
+                    "endpoint": endpoint_key,
+                    "payload": None,
+                    "status": status
+                })
             else:
                 print(f"[!] WARNING: Unexpected Status {status}")
         else:
             print(f"[!] No response for user '{user_id}' on '{endpoint_key}'")
+    return findings
