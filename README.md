@@ -3,7 +3,7 @@ Small, configuration-driven framework in Python to perform automated authorizati
 
 ### configs
 - configs are located in config/
-- In config/endpoints_config.py configure API endpoints and ownership of endpoints
+- In config/access_config.py configure API endpoints and ownership of endpoints
 - In config/users_config.py configure user role and credentials
 
 ```sh

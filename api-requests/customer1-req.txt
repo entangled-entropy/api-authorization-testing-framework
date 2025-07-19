@@ -1,0 +1,9 @@
+Customer1:
+
+Scheduled:
+* 08141060-278c-4a64-9909-1b2108442632, customer1basicplan
+* 3a65d016-b458-478b-9f7a-157431e67651, customer1standardplan
+
+New:
+* 8a9d35fa-4484-4d74-b97b-8a4695bc2fd5, test123
+

@@ -6,8 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
-*.txt
-api-requests/
+note.txt
+sorted*.txt
 
 # Distribution / packaging
 .Python
